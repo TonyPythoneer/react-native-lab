@@ -1,6 +1,6 @@
 'use strict'
 
 import { AppRegistry } from 'react-native'
-import App from './dist/tutorial'
+import App from './dist'
 
-AppRegistry.registerComponent('AwesomeProject', () => App)
+AppRegistry.registerComponent('Boilerplate', () => App)
