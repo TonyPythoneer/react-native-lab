@@ -1,201 +1,188 @@
 'use strict';
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-var React = require('react');
-var ReactNative = require('react-native');
-var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-} = ReactNative;
-
-var Animated = require('Animated');
+const Animated = require('Animated');  // No ts defination. It's from 'react-native/Libraries/Animated/src/Animated'
 import GameBoard from './GameBoard';
-var TouchableBounce = require('TouchableBounce');
+const TouchableBounce = require('TouchableBounce');  // No ts defination. It's from 'react-native/Libraries/Components/Touchable/TouchableBounce'
 
-var BOARD_PADDING = 3;
-var CELL_MARGIN = 4;
-var CELL_SIZE = 60;
 
-class Cell extends React.Component {
-  render() {
-    return <View style={styles.cell} />;
-  }
+const BOARD_PADDING = 3;
+const CELL_MARGIN = 4;
+const CELL_SIZE = 60;
+
+
+class Cell extends React.Component<{}, {}> {
+    render() {
+        return <View style={styles.cell} />;
+    }
 }
 
-class Board extends React.Component {
-  render() {
-    return (
-      <View style={styles.board}>
-        <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
-        <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
-        <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
-        <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
-        {this.props.children}
-      </View>
-    );
-  }
+class Board extends React.Component<{}, {}> {
+    render() {
+        return (
+            <View style={styles.board}>
+                <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
+                <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
+                <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
+                <View style={styles.row}><Cell/><Cell/><Cell/><Cell/></View>
+                {this.props.children}
+            </View>
+        );
+    }
 }
 
-class Tile extends React.Component {
-  state: any;
 
-  static _getPosition(index): number {
-    return BOARD_PADDING + (index * (CELL_SIZE + CELL_MARGIN * 2) + CELL_MARGIN);
-  }
-
-  constructor(props: {}) {
-    super(props);
-
-    var tile = this.props.tile;
-
-    this.state = {
-      opacity: new Animated.Value(0),
-      top: new Animated.Value(Tile._getPosition(tile.toRow())),
-      left: new Animated.Value(Tile._getPosition(tile.toColumn())),
-    };
-  }
-
-  calculateOffset(): {top: number; left: number; opacity: number} {
-    var tile = this.props.tile;
-
-    var offset = {
-      top: this.state.top,
-      left: this.state.left,
-      opacity: this.state.opacity,
+class Tile extends React.Component<any, any> {
+    static _getPosition(index): number {
+        return BOARD_PADDING + (index * (CELL_SIZE + CELL_MARGIN * 2) + CELL_MARGIN);
     };
 
-    if (tile.isNew()) {
-      Animated.timing(this.state.opacity, {
-        duration: 100,
-        toValue: 1,
-      }).start();
-    } else {
-      Animated.parallel([
-        Animated.timing(offset.top, {
-          duration: 100,
-          toValue: Tile._getPosition(tile.toRow()),
-        }),
-        Animated.timing(offset.left, {
-          duration: 100,
-          toValue: Tile._getPosition(tile.toColumn()),
-        }),
-      ]).start();
+    constructor(props) {
+        super(props);
+
+        let tile = this.props.tile;
+
+        this.state = {
+            opacity: new Animated.Value(0),
+            top: new Animated.Value(Tile._getPosition(tile.toRow())),
+            left: new Animated.Value(Tile._getPosition(tile.toColumn())),
+        };
     }
-    return offset;
-  }
 
-  render() {
-    var tile = this.props.tile;
+    calculateOffset(): { top: number; left: number; opacity: number } {
+        let tile = this.props.tile;
 
-    var tileStyles = [
-      styles.tile,
-      styles['tile' + tile.value],
-      this.calculateOffset(),
-    ];
+        let offset = {
+            top: this.state.top,
+            left: this.state.left,
+            opacity: this.state.opacity,
+        };
 
-    var textStyles = [
-      styles.value,
-      tile.value > 4 && styles.whiteText,
-      tile.value > 100 && styles.threeDigits,
-      tile.value > 1000 && styles.fourDigits,
-    ];
+        if (tile.isNew()) {
+            Animated.timing(this.state.opacity, {
+                duration: 100,
+                toValue: 1,
+            }).start();
+        } else {
+            Animated.parallel([
+                Animated.timing(offset.top, {
+                    duration: 100,
+                    toValue: Tile._getPosition(tile.toRow()),
+                }),
+                Animated.timing(offset.left, {
+                    duration: 100,
+                    toValue: Tile._getPosition(tile.toColumn()),
+                }),
+            ]).start();
+        }
+        return offset;
+    }
 
-    return (
-      <Animated.View style={tileStyles}>
-        <Text style={textStyles}>{tile.value}</Text>
-      </Animated.View>
-    );
-  }
+    render() {
+        let tile = this.props.tile;
+
+        let tileStyles = [
+            styles.tile,
+            styles[`tile${tile.value}`],
+            this.calculateOffset(),
+        ];
+
+        let textStyles = [
+            styles.value,
+            tile.value > 4 && styles.whiteText,
+            tile.value > 100 && styles.threeDigits,
+            tile.value > 1000 && styles.fourDigits,
+        ];
+
+        return (
+            <Animated.View style={tileStyles}>
+                <Text style={textStyles}>{tile.value}</Text>
+            </Animated.View>
+        );
+    }
 }
 
-class GameEndOverlay extends React.Component {
-  render() {
-    var board = this.props.board;
 
-    if (!board.hasWon() && !board.hasLost()) {
-      return <View/>;
+class GameEndOverlay extends React.Component<any, {}> {
+    render() {
+        let board = this.props.board;
+
+        if (!board.hasWon() && !board.hasLost()) {
+            return <View/>;
+        }
+
+        let message: string = board.hasWon() ? 'Good Job!' : 'Game Over';
+
+        return (
+            <View style={ styles.overlay } >
+                <Text style={ styles.overlayMessage }>{ message } </Text>
+                <TouchableBounce onPress= { this.props.onRestart } style= { styles.tryAgain } >
+                    <Text style={ styles.tryAgainText }>Try Again?</Text>
+                </TouchableBounce>
+            </View>
+        );
     }
-
-    var message = board.hasWon() ?
-      'Good Job!' : 'Game Over';
-
-    return (
-      <View style={styles.overlay}>
-        <Text style={styles.overlayMessage}>{message}</Text>
-        <TouchableBounce onPress={this.props.onRestart} style={styles.tryAgain}>
-          <Text style={styles.tryAgainText}>Try Again?</Text>
-        </TouchableBounce>
-      </View>
-    );
-  }
 }
 
-class Game2048 extends React.Component {
-  startX: number;
-  startY: number;
-  state: any;
 
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      board: new GameBoard(),
-    };
-    this.startX = 0;
-    this.startY = 0;
-  }
+class Game2048 extends React.Component<{},any> {
+    public startX: number = 0;
+    public startY: number = 0;
+    public state = { board: new GameBoard() };
 
-  restartGame() {
-    this.setState({board: new GameBoard()});
-  }
-
-  handleTouchStart(event: Object) {
-    if (this.state.board.hasWon()) {
-      return;
+    constructor(props: {}) {
+        super(props);
     }
 
-    this.startX = event.nativeEvent.pageX;
-    this.startY = event.nativeEvent.pageY;
-  }
-
-  handleTouchEnd(event: Object) {
-    if (this.state.board.hasWon()) {
-      return;
+    restartGame() {
+        this.setState({ board: new GameBoard() });
     }
 
-    var deltaX = event.nativeEvent.pageX - this.startX;
-    var deltaY = event.nativeEvent.pageY - this.startY;
-
-    var direction = -1;
-    if (Math.abs(deltaX) > 3 * Math.abs(deltaY) && Math.abs(deltaX) > 30) {
-      direction = deltaX > 0 ? 2 : 0;
-    } else if (Math.abs(deltaY) > 3 * Math.abs(deltaX) && Math.abs(deltaY) > 30) {
-      direction = deltaY > 0 ? 3 : 1;
+    handleTouchStart(event: React.GestureResponderEvent) {
+        if (this.state.board.hasWon()) {
+            return;
+        }
+        this.startX = event.nativeEvent.pageX;
+        this.startY = event.nativeEvent.pageY;
     }
 
-    if (direction !== -1) {
-      this.setState({board: this.state.board.move(direction)});
+    handleTouchEnd(event: React.GestureResponderEvent) {
+        if (this.state.board.hasWon()) { return; }
+        let deltaX: number = event.nativeEvent.pageX - this.startX;
+        let deltaY: number = event.nativeEvent.pageY - this.startY;
+
+        let direction: number = -1;
+        if (Math.abs(deltaX) > 3 * Math.abs(deltaY) && Math.abs(deltaX) > 30) {
+            direction = deltaX > 0 ? 2 : 0;
+        } else if (Math.abs(deltaY) > 3 * Math.abs(deltaX) && Math.abs(deltaY) > 30) {
+            direction = deltaY > 0 ? 3 : 1;
+        }
+
+        if (direction !== -1) {
+            this.setState({ board: this.state.board.move(direction) });
+        }
     }
-  }
 
-  render() {
-    var tiles = this.state.board.tiles
-      .filter((tile) => tile.value)
-      .map((tile) => <Tile ref={tile.id} key={tile.id} tile={tile} />);
+    render() {
+        var tiles = this.state.board.tiles
+            .filter((tile) => { return tile.value > 0; })
+            .map((tile) => <Tile ref={tile.id} key={tile.id} tile={tile} />);
 
-    return (
-      <View
-        style={styles.container}
-        onTouchStart={(event) => this.handleTouchStart(event)}
-        onTouchEnd={(event) => this.handleTouchEnd(event)}>
-        <Board>
-          {tiles}
-        </Board>
-        <GameEndOverlay board={this.state.board} onRestart={() => this.restartGame()} />
-      </View>
-    );
-  }
+        return (
+            <View
+                style={styles.container}
+                onTouchStart={(event) => this.handleTouchStart(event) }
+                onTouchEnd={(event) => this.handleTouchEnd(event) }>
+                <Board>
+                    {tiles}
+                </Board>
+                <GameEndOverlay board={this.state.board} onRestart={() => this.restartGame() } />
+            </View>
+        );
+    }
 }
+
 
 var styles = StyleSheet.create({
   container: {
