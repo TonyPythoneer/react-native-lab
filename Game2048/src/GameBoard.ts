@@ -104,7 +104,7 @@ export default class Board {
         }
     }
     /**
-     * The number
+     * The value is top of cell
      * @param  {number[]} args - value, row, column
      * @return {Tile}
      */
@@ -190,22 +190,39 @@ export default class Board {
         this.tiles = this.tiles.filter(function(tile: Tile) { return tile.markForDeletion === false; });
         this.tiles.forEach(function(tile: Tile) { tile.markForDeletion = true; });
     }
+    /**
+     * hasWon
+     * @return {boolean} The player has won or not
+     */
     hasWon(): boolean {
         return this.won;
     }
+    /**
+     * You has lost suppose the board hasn't empty cell or can't merge cells
+     * @return {boolean} It means player is lost or not
+     */
     hasLost(): boolean {
         let canMove: boolean = false;
 
         for (let row = 0; row < Board.size; ++row) {
             for (let col = 0; col < Board.size; ++col) {
-                canMove = canMove || (this.cells[row][col].value === 0);
+                // Logic process: It can move if the board has a empty cell
+                let hasEmptyCell: boolean = (this.cells[row][col].value === 0);
+                canMove = canMove || hasEmptyCell;
+
                 for (var dir = 0; dir < 4; ++dir) {
+                    // Variable process: The new position is ready for checking available
                     let newRow: number = row + Board.deltaX[dir];
                     let newColumn: number = col + Board.deltaY[dir];
-                    if (newRow < 0 || newRow >= Board.size || newColumn < 0 || newColumn >= Board.size) {
-                        continue;
-                    }
-                    canMove = canMove || (this.cells[row][col].value === this.cells[newRow][newColumn].value);
+
+                    // Validation process: Avoid to use the new position that it's out of range of the board
+                    let [isOutOfRight, isOutOfLeft, isOutOfDown, isOutOfUp]: boolean[] =
+                        [newRow < 0, newRow >= Board.size, newColumn < 0, newColumn >= Board.size]
+                    if (isOutOfRight || isOutOfLeft || isOutOfDown || isOutOfUp) { continue; }
+
+                    // Logic process: It can move if the two cells can merge
+                    let canMerge: boolean = this.cells[row][col].value === this.cells[newRow][newColumn].value;
+                    canMove = canMove || canMerge;
                 }
             }
         }
