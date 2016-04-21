@@ -1,14 +1,20 @@
-/* rotateLeft */
-/* status : OK (20160420)*/
+/* status : OK (20160421) - Add jsdoc */
+/**
+ * rotateLeft
+ * @param {Tile[][]} matrix [description]
+ * @example
+ * [[ 1,  2,  3,  4],       [[4, 8, 12, 16],
+ *  [ 5,  6,  7,  8],   =>   [3, 7, 11, 15],
+ *  [ 9, 10, 11, 12],        [2, 6, 10, 14],
+ *  [13, 14, 15, 16]]        [1, 5,  9, 13]]
+ */
 function rotateLeft(matrix: Tile[][]) {
     let rows: number = matrix.length;
     let cols: number = matrix[0].length;
-    let res = [];
-
-    /* make matrix */
+    let res = [];  // result
     for (let row = 0; row < rows; row++) {
         res.push([]);
-        for (let col = 0; col < cols; ++col) {
+        for (let col = 0; col < cols; col++) {
             res[row][col] = matrix[col][cols - row - 1];
         }
     }
@@ -16,21 +22,39 @@ function rotateLeft(matrix: Tile[][]) {
 }
 
 
-/* Tile */
 /* status : OK (20160420)*/
+/**
+ * A tile for recording position
+ */
 class Tile {
     public oldRow: number = -1;
     public oldColumn: number = -1;
     public markForDeletion: boolean = false;
-    public mergedInto: any = null;
+    public mergedInto: Tile = null;
     public id: number;
     public static id: number = 0;
+    /**
+     * Create a tile.
+     * @param {number} value - The value is on the tile.
+     * @param {number} row - The row of position.
+     * @param {number} column - The column of position.
+     */
     constructor(public value: number = 0, public row: number = -1, public column: number = -1) {
         this.id = Tile.id++;
     }
+    /**
+     * New for old cover on position
+     * @param {number} row - new row of
+     * @param {number} column [description]
+     */
     moveTo(row: number, column: number): void {
         [this.oldRow, this.oldColumn, this.row, this.column] = [this.row, this.row, row, column];
     }
+    /**
+     * [moveTo description]
+     * @param {number} row - new row of
+     * @param {number} column [description]
+     */
     isNew(): boolean {
         return this.oldRow === -1 && !this.mergedInto;
     }
@@ -69,18 +93,26 @@ export default class Board {
         this.setPositions();
     }
     /**
-     * buildLayout 4*4 layout
+     * Build of 4*4 board
      */
-    buildLayout() {
-        for (var i = 0; i < Board.size; i++) {
-            this.cells[i] = [this.addTile(), this.addTile(), this.addTile(), this.addTile()];
+    buildLayout(): void {
+        for (let i = 0; i < Board.size; i++) {
+            this.cells[i] = [];
+            for (let j = 0; j < Board.size; j++) {
+                this.cells[i].push(this.addTile());
+            }
         }
     }
+    /**
+     * The number
+     * @param  {number[]} args - value, row, column
+     * @return {Tile}
+     */
     addTile(...args): Tile {
-        let res: Tile = new Tile();
-        Tile.apply(res, args);
-        this.tiles.push(res);
-        return res
+        let tile: Tile = new Tile();
+        Tile.apply(tile, args);  // Instance process: Apply new args for instance
+        this.tiles.push(tile);
+        return tile
     }
     moveLeft(): boolean {
         let hasChanged: boolean = false;
@@ -94,10 +126,9 @@ export default class Board {
                     this.addTile();
                 if (currentRow.length > 0 && currentRow[0].value === targetTile.value) {
                     let tile1: Tile = targetTile;
-                    targetTile = this.addTile(targetTile.value);
-                    tile1.mergedInto = targetTile;
                     let tile2: Tile = currentRow.shift();
-                    tile2.mergedInto = targetTile;
+                    targetTile = this.addTile(targetTile.value);
+                    [tile1.mergedInto, tile2.mergedInto] = [targetTile, targetTile]
                     targetTile.value += tile2.value;
                 }
                 resultRow[target] = targetTile;
@@ -117,7 +148,11 @@ export default class Board {
             })
         })
     }
+    /**
+     * Pick up any empty cell randomly as new tile
+     */
     addRandomTile() {
+        // Instance process: Find empty cells and record in array
         let emptyCells = [];
         for (let r = 0; r < Board.size; r++) {
             for (let c = 0; c < Board.size; c++) {
@@ -126,19 +161,23 @@ export default class Board {
                 }
             }
         }
+
+        // Instance process: Pick up any empty cell randomly
         let index = Math.floor(Math.random() * emptyCells.length);
         let cell = emptyCells[index];
+        // Instance process: Decide to set 4 or 2 as value of the tile
         let newValue = Math.random() < Board.fourProbability ? 4 : 2;
+        // Instance process: Insert to new random value in cells
         this.cells[cell.r][cell.c] = this.addTile(newValue);
     };
     move(direction: number): Board {
         // rules: 0 -> left, 1 -> up, 2 -> right, 3 -> down
         this.clearOldTiles();
-        for (let i = 0; i < direction; ++i) {
+        for (let i = 0; i < direction; i++) {
             this.cells = rotateLeft(this.cells);
         }
         let hasChanged: boolean = this.moveLeft();
-        for (var i = direction; i < 4; ++i) {
+        for (var i = direction; i < 4; i++) {
             this.cells = rotateLeft(this.cells);
         }
         if (hasChanged) {
