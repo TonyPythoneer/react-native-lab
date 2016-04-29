@@ -1,0 +1,20 @@
+{
+  "name": "ts-react-native-redux-kit",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "postinstall": "tsd install",
+    "update": "tsd update --save --overwrite",
+    "watch": "tsc -w",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android": "node node_modules/react-native/local-cli/cli.js run-android",
+    "ios": "node node_modules/react-native/local-cli/cli.js run-ios"
+  },
+  "dependencies": {
+    "react": "^0.14.8",
+    "react-native": "^0.24.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.0.1"
+  }
+}
