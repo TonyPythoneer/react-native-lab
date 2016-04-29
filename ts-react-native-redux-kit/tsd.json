@@ -5,14 +5,20 @@
   "path": "typings",
   "bundle": "typings/tsd.d.ts",
   "installed": {
-    "react-native/react-native.d.ts": {
-      "commit": "94d8775a947f626269b06ccadd6f5e61839389d0"
+    "redux/redux.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     },
     "react/react.d.ts": {
-      "commit": "94d8775a947f626269b06ccadd6f5e61839389d0"
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     },
-    "whatwg-fetch/whatwg-fetch.d.ts": {
-      "commit": "94d8775a947f626269b06ccadd6f5e61839389d0"
+    "redux-thunk/redux-thunk.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "react-redux/react-redux.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
+    },
+    "react-native/react-native.d.ts": {
+      "commit": "08ed4e9f1869e37e29514d862e0158b40e550232"
     }
   }
 }

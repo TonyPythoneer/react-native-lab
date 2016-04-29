@@ -1,6 +1,6 @@
-'use strict'
+import { AppRegistry } from 'react-native';
 
-import { AppRegistry } from 'react-native'
-import App from './dist'
+import App from './dist/App';
 
-AppRegistry.registerComponent('Boilerplate', () => App)
+
+AppRegistry.registerComponent('Counter', () => App);
