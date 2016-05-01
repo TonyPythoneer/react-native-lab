@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
 
-//import containerApp from '../container-app/container-app.reducer'
+import counter from '../counter/counter.reducer'
 
 
 export default <Redux.Reducer>combineReducers({
+	counter
 });

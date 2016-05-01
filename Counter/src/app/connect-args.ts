@@ -1,14 +1,15 @@
-//import componentApp from '../counter/counter.container';
-//import * as componentActions from '../counter/counter.actions';
+import {bindActionCreators} from "redux";
+
+import counterActions from '../counter/counter.actions';
 
 
 export function mapStateToProps(state) {
-    return //{ counter: state.counter };
+    return { counter: state.counter };
 }
 
 
 export function mapDispatchToProps(dispatch) {
     return {
-        //counterActions: bindActionCreators(counterActions, dispatch)
+        counterActions: bindActionCreators(counterActions, dispatch)
     };
 }

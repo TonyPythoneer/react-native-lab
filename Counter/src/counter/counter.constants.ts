@@ -1,0 +1,3 @@
+const APP = 'COUNTER'
+export const INCREASEMENT = `${APP}:INCREASEMENT`
+export const DECREASEMENT = `${APP}:DECREASEMENT`
