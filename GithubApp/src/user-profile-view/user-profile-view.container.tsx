@@ -12,11 +12,23 @@ export default class UserProfileViewApp extends React.Component<any, any> {
             case "ok":
                 return <UserProfileView searchedResult={searchedResult}/>
             case "error":
-                return <Text>Error!</Text>
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 64 }}>Error!</Text>
+                    </View>
+                )
             case "wait":
-                return <Text>Wait...</Text>
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 64 }}>Wait...!</Text>
+                    </View>
+                )
             default:
-                return <Text>Nothing</Text>
+                return (
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <Text style={{ textAlign: 'center', fontSize: 64 }}>Nothing!</Text>
+                    </View>
+                )
         }
     }
 }
@@ -50,11 +62,20 @@ class UserProfileView extends React.Component<any, any> {
                     </View>
                 )}>
 
-                <View>
-                    <Text style={{ fontSize: 128 }}>
-                        123123123123123123123123123123123123123123123123123123123123
-                        123123123123123123123123123123123123123123123123123123123123
-                        123123123123123123123123123123123123123123123123123123123123
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ textAlign: 'center', fontSize: 64 }}>
+                        followers: {followers}
+                    </Text>
+                </View>
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{ textAlign: 'center', fontSize: 64}}>
+                        public_repos: {public_repos}
                     </Text>
                 </View>
             </ParallaxView>
