@@ -19,6 +19,9 @@
     },
     "react-native/react-native.d.ts": {
       "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
+    },
+    "whatwg-fetch/whatwg-fetch.d.ts": {
+      "commit": "e05e1f6f83c6ac84e9d7ff8284e8089d53a788a6"
     }
   }
 }

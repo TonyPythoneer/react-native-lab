@@ -4,7 +4,9 @@ import searchBarActions from '../search-bar/search-bar.actions';
 
 
 export function mapStateToProps(state) {
-    return { searchBar: state.text };
+    return {
+        searchedResult: state.searchBar,
+    };
 }
 
 

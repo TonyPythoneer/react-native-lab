@@ -5,7 +5,7 @@ import { Text, StyleSheet, View, TextInput } from 'react-native';
 export default class SearchBar extends React.Component<any, any>{
     private onBeginSearch(event:{ nativeEvent: { text: string } }): void {
         const { actions } = this.props;
-        actions.beginSearch(event.nativeEvent.text);
+        actions.completeSearch(event.nativeEvent.text);
     }
     render() {
         return (
